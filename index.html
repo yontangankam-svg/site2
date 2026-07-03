@@ -70,10 +70,32 @@ transform:translateY(100vh);
 opacity:0;
 }
 }
+
+.dashboard-link {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-size: 14px;
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+.dashboard-link:hover {
+  background: rgba(0,0,0,0.9);
+  transform: scale(1.05);
+}
 </style>
 </head>
 
 <body>
+
+<!-- 📊 LIEN VERS LE DASHBOARD -->
+<a href="dashboard.html" class="dashboard-link" target="_blank" title="Voir les statistiques">📊 Dashboard</a>
 
 <!-- 🎵 MUSIQUE DE FOND (LOCALE) -->
 <audio id="bgMusic" loop preload="auto">
@@ -96,7 +118,7 @@ opacity:0;
 
 <p>Veux-tu continuer ?</p>
 
-<button onclick="playYes();step2()">Oui 💖</button>
+<button onclick="playYes();trackClick('Oui - Bienvenue');step2()">Oui 💖</button>
 <button onmouseover="playSwoosh();runAway()" id="s1-no">Non 😏</button>
 </div>
 
@@ -108,7 +130,7 @@ opacity:0;
 
 <p>Veux-tu passer un moment avec moi ? 💕</p>
 
-<button onclick="playYes();step3()">ça marche 💖</button>
+<button onclick="playYes();trackClick('Ça marche - Sortie');step3()">ça marche 💖</button>
 <button onmouseover="playSwoosh();runAway()" id="s2-no">je reste chez moi 😅</button>
 </div>
 
@@ -141,7 +163,7 @@ opacity:0;
 
 <br>
 
-<button onclick="playYes();step4()">Valider 💖</button>
+<button onclick="playYes();trackClick('Valider - Choix');step4()">Valider 💖</button>
 </div>
 
 <!-- STEP 4 -->
@@ -153,6 +175,8 @@ opacity:0;
 <p>Rappelle-toi : je t'ai pas forcée 😄</p>
 <p>Ta sortie est confirmée 💌</p>
 </div>
+
+<script src="tracker.js"></script>
 
 <script>
 let audioCtx = null;
@@ -225,6 +249,17 @@ function runAway(e){
   btn.style.left=Math.random()*70+"vw";
 }
 
+// 📊 FONCTION DE SUIVI DES CLICS
+function trackClick(linkName) {
+  // Attendre que le tracker soit chargé
+  if (typeof tracker !== 'undefined') {
+    tracker.trackClick(linkName);
+  } else {
+    // Retry après 100ms si tracker n'est pas prêt
+    setTimeout(() => trackClick(linkName), 100);
+  }
+}
+
 function step2(){
 document.getElementById("step1").style.display="none";
 document.getElementById("step2").style.display="block";
@@ -262,6 +297,14 @@ const loc=document.getElementById("locSelect").value;
 const other=document.getElementById("locOther").value.trim();
 const time=document.getElementById("timeInput").value;
 const chosen=other?other:loc;
+
+// 📊 ENREGISTRER LA RÉPONSE
+if (typeof tracker !== 'undefined') {
+  tracker.trackResponse('step4', {
+    location: chosen,
+    time: time
+  });
+}
 
 document.getElementById("step3").style.display="none";
 document.getElementById("step4").style.display="block";
