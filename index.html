@@ -254,7 +254,7 @@ font-size: 16px;
 
 <img src="https://media.giphy.com/media/OkJat1YNdoD3W/giphy.gif">
 
-<select id="locSelect">
+<select id="locSelect" onchange="playYes();trackLocationChange(this.value)">
 <option>Restaurant 🍽️</option>
 <option>Piscine 🏊</option>
 <option>Chez moi 🏠</option>
@@ -271,9 +271,9 @@ font-size: 16px;
 
 <br>
 
-<input id="locOther" placeholder="Autre lieu">
+<input id="locOther" placeholder="Autre lieu" onchange="playYes();trackLocationChange('Autre: ' + this.value)">
 <br>
-<input type="time" id="timeInput">
+<input type="time" id="timeInput" onchange="playYes();trackTimeChange(this.value)">
 
 <br>
 
@@ -299,7 +299,9 @@ let answers = {
   q1: null,
   q2: null,
   q3: null,
-  q4: null
+  q4: null,
+  location: null,
+  time: null
 };
 
 function getAudioCtx() {
@@ -385,6 +387,26 @@ function trackClick(linkName) {
   }
 }
 
+// 📊 FONCTION DE SUIVI DU LIEU
+function trackLocationChange(location) {
+  if (typeof tracker !== 'undefined') {
+    tracker.trackClick('Lieu sélectionné: ' + location);
+    console.log("Lieu enregistré:", location);
+  } else {
+    setTimeout(() => trackLocationChange(location), 100);
+  }
+}
+
+// 📊 FONCTION DE SUIVI DE L'HEURE
+function trackTimeChange(time) {
+  if (typeof tracker !== 'undefined') {
+    tracker.trackClick('Heure sélectionnée: ' + time);
+    console.log("Heure enregistrée:", time);
+  } else {
+    setTimeout(() => trackTimeChange(time), 100);
+  }
+}
+
 function step2(){
   document.getElementById("step1").style.display="none";
   document.getElementById("step2").style.display="block";
@@ -463,7 +485,11 @@ function step4(){
   const time=document.getElementById("timeInput").value;
   const chosen=other?other:loc;
 
-  // 📊 ENREGISTRER LA RÉPONSE
+  // Stocker les réponses finales
+  answers.location = chosen;
+  answers.time = time;
+
+  // 📊 ENREGISTRER LA RÉPONSE FINALE
   if (typeof tracker !== 'undefined') {
     tracker.trackResponse('step4', {
       couleur: answers.q1,
