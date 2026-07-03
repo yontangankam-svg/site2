@@ -31,6 +31,11 @@ border-radius:25px;
 font-size:18px;
 cursor:pointer;
 margin:10px;
+transition: all 0.3s ease;
+}
+
+button:hover {
+transform: scale(1.05);
 }
 
 #yes{
@@ -42,6 +47,38 @@ color:hotpink;
 background:black;
 color:white;
 position:absolute;
+}
+
+.choice-btn {
+padding: 12px 20px;
+margin: 8px;
+font-size: 16px;
+border-radius: 20px;
+border: 2px solid white;
+background: rgba(255, 255, 255, 0.2);
+color: white;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+
+.choice-btn:hover:not(.disabled) {
+background: rgba(255, 255, 255, 0.4);
+transform: scale(1.05);
+}
+
+.choice-btn.active {
+background: hotpink;
+border-color: hotpink;
+}
+
+.choice-btn.disabled {
+opacity: 0.3;
+cursor: not-allowed;
+position: absolute;
+}
+
+.choice-btn.disabled:hover {
+transform: none;
 }
 
 select,input{
@@ -69,6 +106,26 @@ to{
 transform:translateY(100vh);
 opacity:0;
 }
+}
+
+.question-container {
+margin: 30px auto;
+max-width: 600px;
+}
+
+.question-title {
+font-size: 24px;
+margin-bottom: 20px;
+font-weight: bold;
+}
+
+.input-field {
+width: 300px;
+padding: 12px;
+margin: 10px auto;
+border-radius: 15px;
+border: none;
+font-size: 16px;
 }
 
 .dashboard-link {
@@ -119,7 +176,7 @@ opacity:0;
 <p>Veux-tu continuer ?</p>
 
 <button onclick="playYes();trackClick('Oui - Bienvenue');step2()">Oui 💖</button>
-<button onmouseover="playSwoosh();runAway()" id="s1-no">Non 😏</button>
+<button onmouseover="playSwoosh();runAway(this)" id="s1-no">Non 😏</button>
 </div>
 
 <!-- STEP 2 -->
@@ -130,8 +187,61 @@ opacity:0;
 
 <p>Veux-tu passer un moment avec moi ? 💕</p>
 
-<button onclick="playYes();trackClick('Ça marche - Sortie');step3()">ça marche 💖</button>
-<button onmouseover="playSwoosh();runAway()" id="s2-no">je reste chez moi 😅</button>
+<button onclick="playYes();trackClick('Ça marche - Sortie');step2b()">ça marche 💖</button>
+<button onmouseover="playSwoosh();runAway(this)" id="s2-no">je reste chez moi 😅</button>
+</div>
+
+<!-- STEP 2B - QUESTIONS -->
+<div id="step2b" class="step">
+<h2>Avant de partir, connais-moi mieux 💖</h2>
+
+<img src="https://media.giphy.com/media/fxsqOYnIMEefC/giphy.gif">
+
+<!-- QUESTION 1: COULEUR PRÉFÉRÉE -->
+<div id="question1" class="question-container">
+<div class="question-title">Question 1️⃣ : Quelle est MA couleur préférée ? 🎨</div>
+<button class="choice-btn" onclick="playYes();trackClick('Q1 - Noir');selectChoice('q1', 'noir')">🖤 Noir</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🌸 Rose</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🌈 Arc-en-ciel</button>
+<div style="margin-top: 20px; font-size: 14px;">
+<p id="q1-feedback" style="display:none; color: #ffff00;">✓ Bonne réponse ! Tu me connais bien 😊</p>
+</div>
+</div>
+
+<!-- QUESTION 2: HOBBY -->
+<div id="question2" class="question-container" style="display:none;">
+<div class="question-title">Question 2️⃣ : Quel est MON hobby ? 🏃</div>
+<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">👊 Taper les gens pour vivre</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🚬 Fumer</button>
+<button class="choice-btn" onclick="playYes();trackClick('Q2 - Sport');selectChoice('q2', 'sport')">⚽ Sport</button>
+<div style="margin-top: 15px;">
+<input type="text" class="input-field" id="q2-other" placeholder="Ou autre ?">
+<button class="choice-btn" onclick="playYes();trackClick('Q2 - Autre');selectOtherQ2()">Autre</button>
+</div>
+<div style="margin-top: 20px; font-size: 14px;">
+<p id="q2-feedback" style="display:none; color: #ffff00;">✓ Bonne réponse ! Waouh tu me connais bien haha 🎉</p>
+</div>
+</div>
+
+<!-- QUESTION 3: LE PLUS FORT -->
+<div id="question3" class="question-container" style="display:none;">
+<div class="question-title">Question 3️⃣ : Qui est le plus fort ? 💪</div>
+<p style="font-size: 16px; margin: 15px 0;">Entre Abigail et Yann...</p>
+<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🧑 Yann</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">👩 Abigail</button>
+<button class="choice-btn" onclick="playYes();trackClick('Q3 - Ours');selectChoice('q3', 'ours')">🐻 Un ours</button>
+<div style="margin-top: 20px; font-size: 14px;">
+<p id="q3-feedback" style="display:none; color: #ffff00;">✓ Bonne réponse ! Haha tu es intelligente 😄</p>
+</div>
+</div>
+
+<!-- QUESTION 4: SE REVOIR -->
+<div id="question4" class="question-container" style="display:none;">
+<div class="question-title">Tu vois bien que je suis le seul qui peux te faire rire comme ça haha 😄</div>
+<p style="font-size: 18px; margin: 20px 0;">On devrait se revoir pour fêter ça ! 🎉</p>
+<button class="choice-btn" onclick="playYes();trackClick('Q4 - Oui');selectChoice('q4', 'oui'); setTimeout(()=>step3(), 1500)">✨ Oui t'as raison haha</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">😒 Non</button>
+</div>
 </div>
 
 <!-- STEP 3 -->
@@ -181,6 +291,12 @@ opacity:0;
 <script>
 let audioCtx = null;
 let soundEnabled = true;
+let answers = {
+  q1: null,
+  q2: null,
+  q3: null,
+  q4: null
+};
 
 function getAudioCtx() {
   if (!audioCtx) {
@@ -242,8 +358,13 @@ document.addEventListener("click", () => {
   }
 },{once:true});
 
-function runAway(e){
-  const btn = event.target;
+function runAway(btn){
+  btn.style.position="absolute";
+  btn.style.top=Math.random()*70+"vh";
+  btn.style.left=Math.random()*70+"vw";
+}
+
+function runAwayBtn(btn){
   btn.style.position="absolute";
   btn.style.top=Math.random()*70+"vh";
   btn.style.left=Math.random()*70+"vw";
@@ -261,72 +382,116 @@ function trackClick(linkName) {
 }
 
 function step2(){
-document.getElementById("step1").style.display="none";
-document.getElementById("step2").style.display="block";
+  document.getElementById("step1").style.display="none";
+  document.getElementById("step2").style.display="block";
 
-let text="Merciiii Abigail 💖 je t'ai pas forcée hein haha 😄";
-let i=0;
-document.getElementById("text").innerHTML="";
+  let text="Merciiii Abigail 💖 je t'ai pas forcée hein haha 😄";
+  let i=0;
+  document.getElementById("text").innerHTML="";
 
-let interval=setInterval(()=>{
-document.getElementById("text").innerHTML+=text[i];
-i++;
-if(i>=text.length) clearInterval(interval);
-},50);
+  let interval=setInterval(()=>{
+    document.getElementById("text").innerHTML+=text[i];
+    i++;
+    if(i>=text.length) clearInterval(interval);
+  },50);
+}
+
+function step2b(){
+  document.getElementById("step2").style.display="none";
+  document.getElementById("step2b").style.display="block";
+}
+
+function selectChoice(question, answer) {
+  answers[question] = answer;
+  
+  // Afficher le feedback
+  const feedback = document.getElementById(question + '-feedback');
+  if(feedback) {
+    feedback.style.display = 'block';
+  }
+  
+  // Passer à la question suivante après un délai
+  setTimeout(() => {
+    if(question === 'q1') {
+      document.getElementById("question1").style.display = "none";
+      document.getElementById("question2").style.display = "block";
+    } else if(question === 'q2') {
+      document.getElementById("question2").style.display = "none";
+      document.getElementById("question3").style.display = "block";
+    } else if(question === 'q3') {
+      document.getElementById("question3").style.display = "none";
+      document.getElementById("question4").style.display = "block";
+    }
+  }, 1500);
+}
+
+function selectOtherQ2() {
+  const otherValue = document.getElementById("q2-other").value.trim();
+  if(otherValue) {
+    selectChoice('q2', otherValue);
+  } else {
+    alert("Remplis le champ pour continuer 😊");
+  }
 }
 
 let heartInterval=null;
 
 function step3(){
-document.getElementById("step2").style.display="none";
-document.getElementById("step3").style.display="block";
+  if(heartInterval) clearInterval(heartInterval);
+  document.getElementById("step2b").style.display="none";
+  document.getElementById("step3").style.display="block";
 
-heartInterval=setInterval(()=>{
-let h=document.createElement("div");
-h.innerHTML="❤️";
-h.className="heart";
-h.style.left=Math.random()*100+"vw";
-h.style.animationDuration=(Math.random()*3+2)+"s";
-document.body.appendChild(h);
-setTimeout(()=>h.remove(),5000);
-},200);
+  heartInterval=setInterval(()=>{
+    let h=document.createElement("div");
+    h.innerHTML="❤️";
+    h.className="heart";
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=(Math.random()*3+2)+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5000);
+  },200);
 }
 
 function step4(){
-const loc=document.getElementById("locSelect").value;
-const other=document.getElementById("locOther").value.trim();
-const time=document.getElementById("timeInput").value;
-const chosen=other?other:loc;
+  if(heartInterval) clearInterval(heartInterval);
+  const loc=document.getElementById("locSelect").value;
+  const other=document.getElementById("locOther").value.trim();
+  const time=document.getElementById("timeInput").value;
+  const chosen=other?other:loc;
 
-// 📊 ENREGISTRER LA RÉPONSE
-if (typeof tracker !== 'undefined') {
-  tracker.trackResponse('step4', {
-    location: chosen,
-    time: time
-  });
-}
+  // 📊 ENREGISTRER LA RÉPONSE
+  if (typeof tracker !== 'undefined') {
+    tracker.trackResponse('step4', {
+      couleur: answers.q1,
+      hobby: answers.q2,
+      plusFort: answers.q3,
+      revoir: answers.q4,
+      location: chosen,
+      time: time
+    });
+  }
 
-document.getElementById("step3").style.display="none";
-document.getElementById("step4").style.display="block";
+  document.getElementById("step3").style.display="none";
+  document.getElementById("step4").style.display="block";
 
-for(let i=0;i<60;i++){
-let c=document.createElement("div");
-c.innerHTML="💖";
-c.style.position="fixed";
-c.style.left=Math.random()*100+"vw";
-c.style.top="-20px";
-document.body.appendChild(c);
+  for(let i=0;i<60;i++){
+    let c=document.createElement("div");
+    c.innerHTML="💖";
+    c.style.position="fixed";
+    c.style.left=Math.random()*100+"vw";
+    c.style.top="-20px";
+    document.body.appendChild(c);
 
-let fall=setInterval(()=>{
-c.style.top=(c.offsetTop+5)+"px";
-if(c.offsetTop>window.innerHeight){
-c.remove();
-clearInterval(fall);
-}
-},20);
-}
+    let fall=setInterval(()=>{
+      c.style.top=(c.offsetTop+5)+"px";
+      if(c.offsetTop>window.innerHeight){
+        c.remove();
+        clearInterval(fall);
+      }
+    },20);
+  }
 
-console.log("Choix:",chosen,time);
+  console.log("Choix:", {couleur: answers.q1, hobby: answers.q2, plusFort: answers.q3, revoir: answers.q4, lieu: chosen, heure: time});
 }
 </script>
 
