@@ -59,6 +59,8 @@ background: rgba(255, 255, 255, 0.2);
 color: white;
 cursor: pointer;
 transition: all 0.3s ease;
+position: relative;
+opacity: 1;
 }
 
 .choice-btn:hover:not(.disabled) {
@@ -72,13 +74,15 @@ border-color: hotpink;
 }
 
 .choice-btn.disabled {
-opacity: 0.3;
-cursor: not-allowed;
-position: absolute;
+opacity: 1;
+cursor: pointer;
+position: relative;
+background: rgba(255, 255, 255, 0.2);
 }
 
 .choice-btn.disabled:hover {
-transform: none;
+background: rgba(255, 255, 255, 0.4);
+transform: scale(1.05);
 }
 
 select,input{
@@ -201,8 +205,8 @@ font-size: 16px;
 <div id="question1" class="question-container">
 <div class="question-title">Question 1️⃣ : Quelle est MA couleur préférée ? 🎨</div>
 <button class="choice-btn" onclick="playYes();trackClick('Q1 - Noir');selectChoice('q1', 'noir')">🖤 Noir</button>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🌸 Rose</button>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🌈 Arc-en-ciel</button>
+<button class="choice-btn" onclick="playYes();trackClick('Q1 - Rose');selectChoice('q1', 'rose')">🌸 Rose</button>
+<button class="choice-btn" onclick="playYes();trackClick('Q1 - Arc-en-ciel');selectChoice('q1', 'arc-en-ciel')">🌈 Arc-en-ciel</button>
 <div style="margin-top: 20px; font-size: 14px;">
 <p id="q1-feedback" style="display:none; color: #ffff00;">✓ Bonne réponse ! Tu me connais bien 😊</p>
 </div>
@@ -211,8 +215,8 @@ font-size: 16px;
 <!-- QUESTION 2: HOBBY -->
 <div id="question2" class="question-container" style="display:none;">
 <div class="question-title">Question 2️⃣ : Quel est MON hobby ? 🏃</div>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">👊 Taper les gens pour vivre</button>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🚬 Fumer</button>
+<button class="choice-btn" onclick="playYes();trackClick('Q2 - Taper');selectChoice('q2', 'taper')">👊 Taper les gens pour vivre</button>
+<button class="choice-btn" onclick="playYes();trackClick('Q2 - Fumer');selectChoice('q2', 'fumer')">🚬 Fumer</button>
 <button class="choice-btn" onclick="playYes();trackClick('Q2 - Sport');selectChoice('q2', 'sport')">⚽ Sport</button>
 <div style="margin-top: 15px;">
 <input type="text" class="input-field" id="q2-other" placeholder="Ou autre ?">
@@ -227,8 +231,8 @@ font-size: 16px;
 <div id="question3" class="question-container" style="display:none;">
 <div class="question-title">Question 3️⃣ : Qui est le plus fort ? 💪</div>
 <p style="font-size: 16px; margin: 15px 0;">Entre Abigail et Yann...</p>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🧑 Yann</button>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">👩 Abigail</button>
+<button class="choice-btn" onclick="playYes();trackClick('Q3 - Yann');selectChoice('q3', 'yann')">🧑 Yann</button>
+<button class="choice-btn" onclick="playYes();trackClick('Q3 - Abigail');selectChoice('q3', 'abigail')">👩 Abigail</button>
 <button class="choice-btn" onclick="playYes();trackClick('Q3 - Ours');selectChoice('q3', 'ours')">🐻 Un ours</button>
 <div style="margin-top: 20px; font-size: 14px;">
 <p id="q3-feedback" style="display:none; color: #ffff00;">✓ Bonne réponse ! Haha tu es intelligente 😄</p>
@@ -240,7 +244,7 @@ font-size: 16px;
 <div class="question-title">Tu vois bien que je suis le seul qui peux te faire rire comme ça haha 😄</div>
 <p style="font-size: 18px; margin: 20px 0;">On devrait se revoir pour fêter ça ! 🎉</p>
 <button class="choice-btn" onclick="playYes();trackClick('Q4 - Oui');selectChoice('q4', 'oui'); setTimeout(()=>step3(), 1500)">✨ Oui t'as raison haha</button>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">😒 Non</button>
+<button class="choice-btn" onclick="playYes();trackClick('Q4 - Non');selectChoice('q4', 'non')">😒 Non</button>
 </div>
 </div>
 
