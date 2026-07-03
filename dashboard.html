@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Dashboard de Suivi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+        }
+        
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+        
+        .btn-secondary {
+            background: #718096;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .stat-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #f7fafc;
+            color: #333;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f7fafc;
+        }
+        
+        .bar {
+            display: inline-block;
+            height: 20px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            margin-right: 10px;
+            min-width: 20px;
+        }
+        
+        .chart-container {
+            margin-top: 20px;
+        }
+        
+        .chart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .chart-label {
+            min-width: 150px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .chart-bar-container {
+            flex: 1;
+            background: #e2e8f0;
+            border-radius: 4px;
+            height: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .chart-value {
+            min-width: 50px;
+            text-align: right;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.2em;
+        }
+        
+        .event-log {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .event-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        
+        .event-time {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .event-text {
+            color: #333;
+            margin-top: 5px;
+        }
+        
+        .webhook-form {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+        
+        .alert-info {
+            background: #bee3f8;
+            color: #2c5282;
+            border: 1px solid #90cdf4;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Dashboard de Suivi des Clics</h1>
+            <p class="subtitle">Analyse complète des interactions utilisateurs</p>
+            
+            <div class="button-group">
+                <button class="btn-primary" onclick="refreshDashboard()">🔄 Actualiser</button>
+                <button class="btn-success" onclick="exportData()">💾 Exporter en CSV</button>
+                <button class="btn-secondary" onclick="toggleWebhookForm()">🔗 Configurer Webhook</button>
+                <button class="btn-danger" onclick="resetData()">🗑️ Réinitialiser</button>
+            </div>
+
+            <div id="webhookForm" class="webhook-form" style="display: none;">
+                <h3>Configurer Discord Webhook (optionnel)</h3>
+                <div class="form-group">
+                    <label>URL du Webhook Discord:</label>
+                    <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/..." 
+                           value="">
+                    <button class="btn-primary" onclick="saveWebhook()" style="margin-top: 10px;">Sauvegarder</button>
+                </div>
+                <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                    💡 Les données seront envoyées à Discord en temps réel. <a href="https://discord.com/developers/docs/resources/webhook" target="_blank">Comment créer un webhook?</a>
+                </p>
+            </div>
+
+            <div id="alert" class="alert"></div>
+        </header>
+
+        <!-- STATISTIQUES PRINCIPALES -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👆</div>
+                <div class="stat-label">Clics Total</div>
+                <div class="stat-value" id="totalClicks">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💬</div>
+                <div class="stat-label">Réponses Total</div>
+                <div class="stat-value" id="totalResponses">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👤</div>
+                <div class="stat-label">Sessions</div>
+                <div class="stat-value" id="totalSessions">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-label">Dernière activité</div>
+                <div class="stat-value" id="lastActivity" style="font-size: 1.2em;">--:--</div>
+            </div>
+        </div>
+
+        <!-- LIENS LES PLUS CLIQUÉS -->
+        <div class="section">
+            <h2>🔝 Liens les Plus Cliqués</h2>
+            <div id="topLinksChart" class="chart-container">
+                <div class="no-data">Aucune donnée disponible</div>
+            </div>
+        </div>
+
+        <!-- LIEUX LES PLUS CHOISIS -->
+        <div class="section">
+            <h2>📍 Lieux les Plus Choisis</h2>
+            <div id="topLocationsChart" class="chart-container">
+                <div class="no-data">Aucune donnée disponible</div>
+            </div>
+        </div>
+
+        <!-- ACTIVITÉ PAR HEURE -->
+        <div class="section">
+            <h2>⏱️ Activité par Heure</h2>
+            <div id="hourlyChart" class="chart-container">
+                <div class="no-data">Aucune donnée disponible</div>
+            </div>
+        </div>
+
+        <!-- HISTORIQUE DES CLICS -->
+        <div class="section">
+            <h2>📜 Historique Complet</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Heure</th>
+                        <th>Type</th>
+                        <th>Détails</th>
+                    </tr>
+                </thead>
+                <tbody id="eventLog">
+                    <tr>
+                        <td colspan="3" class="no-data">Aucun événement enregistré</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Importer le tracker
+        const tracker = new LinkTracker();
+
+        function refreshDashboard() {
+            const stats = tracker.getStats();
+            
+            // Mettre à jour les stats
+            document.getElementById('totalClicks').textContent = stats.totalClicks;
+            document.getElementById('totalResponses').textContent = stats.totalResponses;
+            document.getElementById('totalSessions').textContent = stats.totalSessions;
+            
+            // Dernière activité
+            const allEvents = [...tracker.data.clicks, ...tracker.data.responses]
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            if (allEvents.length > 0) {
+                const lastTime = new Date(allEvents[0].timestamp);
+                document.getElementById('lastActivity').textContent = 
+                    lastTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            }
+            
+            // Afficher les graphiques
+            displayTopLinks(stats.topLinks);
+            displayTopLocations(stats.topLocations);
+            displayHourlyChart(stats.clicksByHour);
+            displayEventLog();
+        }
+
+        function displayTopLinks(links) {
+            const container = document.getElementById('topLinksChart');
+            
+            if (links.length === 0) {
+                container.innerHTML = '<div class="no-data">Aucun clic enregistré</div>';
+                return;
+            }
+            
+            const maxCount = Math.max(...links.map(l => l.count));
+            container.innerHTML = links.map(link => `
+                <div class="chart-item">
+                    <div class="chart-label">${link.name}</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar" style="width: ${(link.count / maxCount) * 100}%">
+                            ${link.count}
+                        </div>
+                    </div>
+                    <div class="chart-value">${link.count}</div>
+                </div>
+            `).join('');
+        }
+
+        function displayTopLocations(locations) {
+            const container = document.getElementById('topLocationsChart');
+            
+            if (locations.length === 0) {
+                container.innerHTML = '<div class="no-data">Aucun lieu sélectionné</div>';
+                return;
+            }
+            
+            const maxCount = Math.max(...locations.map(l => l.count));
+            container.innerHTML = locations.map(loc => `
+                <div class="chart-item">
+                    <div class="chart-label">${loc.name}</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar" style="width: ${(loc.count / maxCount) * 100}%">
+                            ${loc.count}
+                        </div>
+                    </div>
+                    <div class="chart-value">${loc.count}</div>
+                </div>
+            `).join('');
+        }
+
+        function displayHourlyChart(hourly) {
+            const container = document.getElementById('hourlyChart');
+            
+            if (Object.keys(hourly).length === 0) {
+                container.innerHTML = '<div class="no-data">Aucune donnée horaire</div>';
+                return;
+            }
+            
+            const maxCount = Math.max(...Object.values(hourly));
+            const chart = Object.entries(hourly)
+                .map(([hour, count]) => `
+                    <div class="chart-item">
+                        <div class="chart-label">${hour}:00</div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar" style="width: ${(count / maxCount) * 100}%">
+                                ${count}
+                            </div>
+                        </div>
+                        <div class="chart-value">${count}</div>
+                    </div>
+                `).join('');
+            
+            container.innerHTML = chart;
+        }
+
+        function displayEventLog() {
+            const tbody = document.getElementById('eventLog');
+            
+            const allEvents = [
+                ...tracker.data.clicks.map(c => ({
+                    timestamp: c.timestamp,
+                    type: '👆 Clic',
+                    details: c.linkName
+                })),
+                ...tracker.data.responses.map(r => ({
+                    timestamp: r.timestamp,
+                    type: '💬 Réponse',
+                    details: `${r.step}: ${JSON.stringify(r.data).substring(0, 50)}...`
+                }))
+            ].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .slice(0, 50);
+            
+            if (allEvents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="no-data">Aucun événement enregistré</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = allEvents.map(event => `
+                <tr>
+                    <td>${new Date(event.timestamp).toLocaleString('fr-FR')}</td>
+                    <td><strong>${event.type}</strong></td>
+                    <td>${event.details}</td>
+                </tr>
+            `).join('');
+        }
+
+        function exportData() {
+            tracker.exportData();
+            showAlert('✅ Données exportées en CSV', 'success');
+        }
+
+        function resetData() {
+            tracker.resetData();
+            refreshDashboard();
+            showAlert('🗑️ Données réinitialisées', 'success');
+        }
+
+        function toggleWebhookForm() {
+            const form = document.getElementById('webhookForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            
+            const url = localStorage.getItem('discordWebhook');
+            if (url) {
+                document.getElementById('webhookUrl').value = url;
+            }
+        }
+
+        function saveWebhook() {
+            const url = document.getElementById('webhookUrl').value;
+            if (url) {
+                localStorage.setItem('discordWebhook', url);
+                showAlert('✅ Webhook Discord configuré!', 'success');
+            } else {
+                showAlert('❌ Veuillez entrer une URL valide', 'error');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert show alert-${type}`;
+            setTimeout(() => alert.classList.remove('show'), 3000);
+        }
+
+        // Actualiser au chargement
+        window.addEventListener('load', () => {
+            const script = document.createElement('script');
+            script.src = 'tracker.js';
+            script.onload = refreshDashboard;
+            document.head.appendChild(script);
+        });
+
+        // Actualiser automatiquement toutes les 5 secondes
+        setInterval(refreshDashboard, 5000);
+    </script>
+</body>
+</html>
