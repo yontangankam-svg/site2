@@ -77,7 +77,7 @@ opacity:0;
 
 <!-- 🎵 MUSIQUE DE FOND (LOCALE) -->
 <audio id="bgMusic" loop preload="auto">
-    <source src="2680ac92-5897-4b35-a524-6265bdd5c6b8.mp3" type="audio/mpeg">
+    <source src="hasenchat-love-on-lock-430697.mp3" type="audio/mpeg">
 </audio>
 
 <!-- 🔊 SON CLIC -->
@@ -146,11 +146,11 @@ opacity:0;
 
 <!-- STEP 4 -->
 <div id="step4" class="step">
-<h1>💖 J’ai hâte de te revoir</h1>
+<h1>💖 J'ai hâte de te revoir</h1>
 
 <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
 
-<p>Rappelle-toi : je t’ai pas forcée 😄</p>
+<p>Rappelle-toi : je t'ai pas forcée 😄</p>
 <p>Ta sortie est confirmée 💌</p>
 </div>
 
@@ -200,9 +200,19 @@ function playSwoosh(){
   playClickFallback();
 }
 
-document.addEventListener("click", () => {
+// Lancer la musique au chargement du site
+window.addEventListener('load', function() {
   const bg = document.getElementById("bgMusic");
   if(bg){
+    bg.volume = 0.35;
+    bg.play().catch(()=>{});
+  }
+});
+
+// Aussi au premier clic (pour la compatibilité navigateur)
+document.addEventListener("click", () => {
+  const bg = document.getElementById("bgMusic");
+  if(bg && bg.paused){
     bg.volume = 0.35;
     bg.play().catch(()=>{});
   }
@@ -219,7 +229,7 @@ function step2(){
 document.getElementById("step1").style.display="none";
 document.getElementById("step2").style.display="block";
 
-let text="Merciiii Abigail 💖 je t’ai pas forcée hein haha 😄";
+let text="Merciiii Abigail 💖 je t'ai pas forcée hein haha 😄";
 let i=0;
 document.getElementById("text").innerHTML="";
 
