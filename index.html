@@ -201,18 +201,19 @@ font-size: 16px;
 <div id="question1" class="question-container">
 <div class="question-title">Question 1️⃣ : Quelle est MA couleur préférée ? 🎨</div>
 <button class="choice-btn" onclick="playYes();trackClick('Q1 - Noir');selectChoice('q1', 'noir')">🖤 Noir</button>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🌸 Rose</button>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🌈 Arc-en-ciel</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();showWrongMessage('Q1', 'Rose', 'ha ha non pour toi oui ha ha 😄');runAwayBtn(this)">🌸 Rose</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();showWrongMessage('Q1', 'Arc-en-ciel', 'ha ha tu rigole faut essayer ha ha 😄');runAwayBtn(this)">🌈 Arc-en-ciel</button>
 <div style="margin-top: 20px; font-size: 14px;">
 <p id="q1-feedback" style="display:none; color: #ffff00;">✓ Bonne réponse ! Tu me connais bien 😊</p>
+<p id="q1-wrong" style="display:none; color: #ffff00;"></p>
 </div>
 </div>
 
 <!-- QUESTION 2: HOBBY -->
 <div id="question2" class="question-container" style="display:none;">
 <div class="question-title">Question 2️⃣ : Quel est MON hobby ? 🏃</div>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">👊 Taper les gens pour vivre</button>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🚬 Fumer</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();showWrongMessage('Q2', 'Taper', 'je suis pacifique 😅');runAwayBtn(this)">👊 Taper les gens pour vivre</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();showWrongMessage('Q2', 'Fumer', 'mais non haha 😄');runAwayBtn(this)">🚬 Fumer</button>
 <button class="choice-btn" onclick="playYes();trackClick('Q2 - Sport');selectChoice('q2', 'sport')">⚽ Sport</button>
 <div style="margin-top: 15px;">
 <input type="text" class="input-field" id="q2-other" placeholder="Ou autre ?">
@@ -220,6 +221,7 @@ font-size: 16px;
 </div>
 <div style="margin-top: 20px; font-size: 14px;">
 <p id="q2-feedback" style="display:none; color: #ffff00;">✓ Bonne réponse ! Waouh tu me connais bien haha 🎉</p>
+<p id="q2-wrong" style="display:none; color: #ffff00;"></p>
 </div>
 </div>
 
@@ -228,10 +230,11 @@ font-size: 16px;
 <div class="question-title">Question 3️⃣ : Qui est le plus fort ? 💪</div>
 <p style="font-size: 16px; margin: 15px 0;">Entre Abigail et Yann...</p>
 <button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">🧑 Yann</button>
-<button class="choice-btn disabled" onmouseover="playSwoosh();runAwayBtn(this)">👩 Abigail</button>
+<button class="choice-btn disabled" onmouseover="playSwoosh();showWrongMessage('Q3', 'Abigail', 'c est vrai que t as du muscle ha ha 💪');runAwayBtn(this)">👩 Abigail</button>
 <button class="choice-btn" onclick="playYes();trackClick('Q3 - Ours');selectChoice('q3', 'ours')">🐻 Un ours</button>
 <div style="margin-top: 20px; font-size: 14px;">
 <p id="q3-feedback" style="display:none; color: #ffff00;">✓ Bonne réponse ! Haha tu es intelligente 😄</p>
+<p id="q3-wrong" style="display:none; color: #ffff00;"></p>
 </div>
 </div>
 
@@ -401,6 +404,21 @@ function trackTimeChange(time) {
   } else {
     setTimeout(() => trackTimeChange(time), 100);
   }
+}
+
+// 📊 AFFICHER MESSAGE POUR MAUVAISE RÉPONSE
+function showWrongMessage(question, answer, message) {
+  const wrongElement = document.getElementById(question + '-wrong');
+  if(wrongElement) {
+    wrongElement.innerHTML = message;
+    wrongElement.style.display = 'block';
+    
+    // Masquer après 2 secondes
+    setTimeout(() => {
+      wrongElement.style.display = 'none';
+    }, 2000);
+  }
+  trackClick(question + ' - ' + answer + ' (mauvaise réponse)');
 }
 
 function step2(){
